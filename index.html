@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Music Player</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      h1 {
+        margin-bottom: 0;
+      }
+      h2 {
+        margin-top: 0;
+      }
+      .controls {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+      }
+      button {
+        font-size: 16px;
+        margin: 0 10px;
+        padding: 10px 20px;
+        background-color: #FBB6F4;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+        background-repeat: no-repeat;
+        background-size: contain;
+      }
+      button:hover {
+        background-color: #E28BD8;
+      }
+      #progress-bar {
+        width: 400px;
+        height: 10px;
+        background-color: #B04CA3;
+        margin-top: 20px;
+      }
+      #progress {
+        height: 100%;
+        background-color: #FBB6F4;
+        transition: width 0.1s linear;
+      }
+      #skip-backward {
+        background-image: url("Backward.png");
+        background-position: center;
+        width: 80px;
+        height: 40px;
+      }
+      #skip-forward {
+        background-image: url("Forward.png");
+        background-position: center;
+        width: 80px;
+        height: 40px;
+      }
+      #play-button {
+        background-image: url(play-512.png);
+        background-size: 25px,25px;
+        background-position: center;
+        width: 80px;
+        height: 40px;
+      }
+      #pause-button{        
+        background-image: url(pause-512.png);
+        background-size: 25px,25px;
+        background-position: center;
+        width: 80px;
+        height: 40px;
+      }
+      .container{
+        background-color: #6D53D4;
+        color: #FBB6F4;
+        
+      }
+      #audio{
+        width: 400px;
+        float: bottom;
+        position: relative;
+        top: 250px;
+      }
+      #get-location{
+        float: top;
+        top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Location Based Music Player</h1>
+      <h2 id="location"></h2>
+      
+      <div class="controls">
+        <button id="skip-backward"></button>
+        <button id="play-button"></button>
+        <button id="pause-button"></button>
+        <button id="skip-forward"></button>
+      </div>
+
+      <div id="progress-bar">
+        <div id="progress"></div>
+      </div>
+      <br>
+      <button id="get-location">Get Location</button>
+      <audio id="audio" src="" controls></audio>
+    </div>
+  
+    <script>
+
+var getLocationButton = document.getElementById("get-location");
+
+getLocationButton.addEventListener("click", function () {
+  getLocation();
+});
+
+      var audio = document.getElementById("audio");
+      var playButton = document.getElementById("play-button");
+      var pauseButton = document.getElementById("pause-button");
+      var progress = document.getElementById("progress");
+      var locationElement = document.getElementById("location");
+      var latitude;
+      var longitude;
+
+      function getLocation() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(setLocation);
+        } else {
+          locationElement.innerHTML = "Geolocation is not supported by this browser.";
+        }
+      }
+
+      function setLocation(position) {
+        latitude = position.coords.latitude;
+        longitude = position.coords.longitude;
+
+        if (longitude > 106.82280) {
+          locationElement.innerHTML = "Entrance to SAS";
+          audio.src = "Just chillin' Best Chill Out Music Playlist (Hip-hop RnB mix).m4a";
+        } else if (longitude <= 106.82280 && longitude > 106.82268) {
+          locationElement.innerHTML = "SAS - Mid Area";
+          audio.src = "Top Hits 2023 ☘ New Popular Songs 2023 ☘ Best English Songs ( Best Pop Music ) Playlist 2023.m4a";
+        } else {
+          locationElement.innerHTML = "Classroom";
+          audio.src = "KPOP PLAYLIST 2023 K-POP Lite.m4a";
+        }
+      }
+
+      playButton.addEventListener("click", function () {
+        audio.play();
+      });
+
+      pauseButton.addEventListener("click", function () {
+        audio.pause();
+      });
+
+      audio.addEventListener("timeupdate", function () {
+        var currentTime = audio.currentTime;
+        var duration = audio.duration;
+        var progressPercentage = (currentTime / duration) * 100;
+        progress.style.width = progressPercentage + "%";
+      });
+
+      getLocation();
+
+      var skipBackwardButton = document.getElementById("skip-backward");
+var skipForwardButton = document.getElementById("skip-forward");
+
+skipBackwardButton.addEventListener("click", skipBackward);
+skipForwardButton.addEventListener("click", skipForward);
+
+function skipBackward() {
+  audio.currentTime -= 120; // skip 2 minutes backward
+}
+
+function skipForward() {
+  audio.currentTime += 120; // skip 2 minutes forward
+}
+
+
+    </script>
+  </body>
